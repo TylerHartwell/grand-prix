@@ -5,6 +5,16 @@
   --foreground: #171717;
 }
 
+.b1 {
+  border: 1px solid red;
+}
+.b2 {
+  border: 1px solid green;
+}
+.b3 {
+  border: 1px solid blue;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

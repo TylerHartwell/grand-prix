@@ -1,18 +1,23 @@
 "use client"
 
+import { Player } from "@/app/page"
+
 interface Props {
   id: string
   playerIds: number[]
+  players: Player[]
 }
 
-const Race = ({ id, playerIds }: Props) => {
+const Race = ({ id, playerIds, players }: Props) => {
   return (
     <li key={id} className="flex b1 h-min">
       <ul className="flex flex-col">
-        <li key={0}>{playerIds[0]}</li>
-        <li key={1}>{playerIds[1]}</li>
-        <li key={2}>{playerIds[2]}</li>
-        <li key={3}>{playerIds[3]}</li>
+        {playerIds.map((playerId, index) => (
+          <li key={playerId} className="text-nowrap flex gap-2">
+            <div className="w-[2ch] text-center">{players[playerIds[index]].carNumber}</div>
+            <div>{players[playerIds[index]].name}</div>
+          </li>
+        ))}
       </ul>
     </li>
   )

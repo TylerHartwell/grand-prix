@@ -13,7 +13,7 @@ import { useState } from "react"
 
 export interface PlayerRace {
   raceId: number
-  laneColor?: LaneColor
+  laneColor: LaneColor
   placement?: Placement
 }
 
@@ -37,27 +37,52 @@ export const placements = [1, 2, 3, 4] as const
 export type LaneColor = (typeof laneColors)[number]
 export type Placement = (typeof placements)[number]
 
-// function findOccurrences(arr: number[][], target: number) {
-//   const indices: number[] = [];
+function getOccurrences(arr: number[][], target: number) {
+  const indices: number[] = []
 
-//   arr.forEach((subArray, index) => {
-//     if (subArray.includes(target)) {
-//       indices.push(index);
-//     }
-//   });
+  arr.forEach((subArray, index) => {
+    if (subArray.includes(target)) {
+      indices.push(index)
+    }
+  })
 
-//   return indices;
-// }
+  return indices
+}
+
+const groups = createGroups()
+
+const raceLanes = [
+  [0, 0, 1, 2, 3],
+  [1, 3, 3, 0, 2],
+  [2, 3, 1, 0, 0],
+  [3, 1, 2, 2, 0],
+  [0, 1, 2, 1, 3],
+  [1, 2, 0, 3, 3],
+  [2, 3, 1, 0, 1],
+  [3, 1, 3, 2, 0],
+  [0, 2, 0, 1, 3],
+  [1, 0, 2, 3, 0],
+  [2, 0, 3, 1, 1],
+  [3, 1, 0, 3, 2],
+  [0, 3, 2, 1, 2],
+  [1, 2, 3, 0, 2],
+  [2, 0, 1, 3, 1],
+  [3, 2, 0, 2, 1]
+]
 
 const initialPlayers: Player[] = Array.from({ length: 16 }, (_, index) => ({
   id: index,
   carNumber: `${index + 1}`,
   name: `Player ${index + 1}`,
-  races: []
+  races: getOccurrences(groups, index).map((raceId, playerRaceId) => {
+    return {
+      raceId: raceId,
+      laneColor: laneColors[raceLanes[index][playerRaceId]]
+    }
+  })
 }))
 
 const Home = () => {
-  const [groups] = useState<number[][]>(() => createGroups())
   const [players, setPlayers] = useState<Player[]>(initialPlayers)
 
   const getPlacement = (playerId: number, raceId: number): Placement | undefined => {
@@ -67,42 +92,14 @@ const Home = () => {
     const race = player.races.find(r => r.raceId === raceId)
     return race?.placement
   }
-  const getLaneColor = (playerId: number, raceId: number): LaneColor | undefined => {
-    const player = players.find(p => p.id === playerId)
-    if (!player) return undefined
-
-    const race = player.races.find(r => r.raceId === raceId)
-    return race?.laneColor
-  }
 
   const handlePlacementChange = (playerId: number, raceId: number, newPlacement: Placement) => {
     setPlayers(prevPlayers =>
       prevPlayers.map(player => {
         if (player.id === playerId) {
-          const raceExists = player.races.some(race => race.raceId === raceId)
-
           return {
             ...player,
-            races: raceExists
-              ? player.races.map(race => (race.raceId === raceId ? { ...race, placement: newPlacement } : race))
-              : [...player.races, { raceId, placement: newPlacement }]
-          }
-        }
-        return player
-      })
-    )
-  }
-  const handleLaneColorChange = (playerId: number, raceId: number, newColor: LaneColor) => {
-    setPlayers(prevPlayers =>
-      prevPlayers.map(player => {
-        if (player.id === playerId) {
-          const raceExists = player.races.some(race => race.raceId === raceId)
-
-          return {
-            ...player,
-            races: raceExists
-              ? player.races.map(race => (race.raceId === raceId ? { ...race, laneColor: newColor } : race))
-              : [...player.races, { raceId, laneColor: newColor }]
+            races: player.races.map(race => (race.raceId === raceId ? { ...race, placement: newPlacement } : race))
           }
         }
         return player
@@ -141,13 +138,13 @@ const Home = () => {
   // const counts = getCountsOfOccurances(groups)
 
   return (
-    <div className="min-h-screen b1 flex flex-col justify-center w-min">
-      <div className="b2 flex gap-5">
-        <div className="b1 w-min">
-          <ol className="flex flex-col gap-1 b3">
+    <div className="min-h-screen flex flex-col justify-center w-min">
+      <div className="flex gap-5 items-center">
+        <div className="w-min">
+          <ol className="flex flex-col gap-1 items-center justify-center">
             {players.map(player => (
-              <li key={player.id} className=" border h-[2em]">
-                <div className="flex">
+              <li key={player.id} className="flex h-[2em] items-center">
+                <div className="flex items-center justify-center gap-1">
                   <input
                     key={player.id + "carNumber"}
                     type="text"
@@ -162,7 +159,7 @@ const Home = () => {
                     onChange={e => handleNameChange(player.id, e.target.value)}
                     className="border rounded w-[10ch]"
                   />
-                  <div className="b3 flex">
+                  <div className="flex">
                     {Array.from({ length: 5 }).map((_, arrIndex) => {
                       const playerRace = player.races[arrIndex]
                       return (
@@ -189,7 +186,7 @@ const Home = () => {
           </ol>
         </div>
 
-        <div className="grid grid-rows-4 gap-5 grid-flow-col b1 w-min">
+        <ol className="grid grid-rows-4 gap-5 grid-flow-col w-min">
           {groups.map((group, index) => (
             <Race
               key={`race-${index}`}
@@ -198,11 +195,9 @@ const Home = () => {
               players={players}
               getPlacement={getPlacement}
               handlePlacementChange={handlePlacementChange}
-              getLaneColor={getLaneColor}
-              handleLaneColorChange={handleLaneColorChange}
             />
           ))}
-        </div>
+        </ol>
       </div>
     </div>
   )

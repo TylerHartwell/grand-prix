@@ -2,6 +2,7 @@
 
 import Race from "@/components/Race"
 import createGroups from "@/utils/createGroups"
+import clsx from "clsx"
 // import getCountsOfOccurances from "@/utils/getCountsOfOccurances"
 import { useState } from "react"
 
@@ -12,8 +13,8 @@ import { useState } from "react"
 
 export interface PlayerRace {
   raceId: number
-  laneColor: LaneColor
-  placement: Placement
+  laneColor?: LaneColor
+  placement?: Placement
 }
 
 export interface Player {
@@ -21,6 +22,13 @@ export interface Player {
   carNumber: string
   name: string
   races: PlayerRace[]
+}
+
+const laneColorMap = {
+  red: "bg-red-500",
+  blue: "bg-blue-500",
+  green: "bg-green-500",
+  yellow: "bg-yellow-500"
 }
 
 export const laneColors = ["red", "yellow", "green", "blue"] as const
@@ -65,7 +73,7 @@ const Home = () => {
             ...player,
             races: raceExists
               ? player.races.map(race => (race.raceId === raceId ? { ...race, placement: newPlacement } : race))
-              : [...player.races, { raceId, laneColor: "red", placement: newPlacement }]
+              : [...player.races, { raceId, placement: newPlacement }]
           }
         }
         return player
@@ -82,7 +90,7 @@ const Home = () => {
             ...player,
             races: raceExists
               ? player.races.map(race => (race.raceId === raceId ? { ...race, laneColor: newColor } : race))
-              : [...player.races, { raceId, laneColor: newColor, placement: 1 }]
+              : [...player.races, { raceId, laneColor: newColor }]
           }
         }
         return player
@@ -143,11 +151,25 @@ const Home = () => {
                     className="border rounded w-[10ch]"
                   />
                   <div className="b3 flex">
-                    <div className={`bg-${player.races[0]?.laneColor}-500 text-center size-6 border`}>{player.races[0]?.placement}</div>
-                    <div className={`bg-${player.races[1]?.laneColor}-500 text-center size-6 border`}>{player.races[1]?.placement}</div>
-                    <div className={`bg-${player.races[2]?.laneColor}-500 text-center size-6 border`}>{player.races[2]?.placement}</div>
-                    <div className={`bg-${player.races[3]?.laneColor}-500 text-center size-6 border`}>{player.races[3]?.placement}</div>
-                    <div className={`bg-${player.races[4]?.laneColor}-500 text-center size-6 border`}>{player.races[4]?.placement}</div>
+                    {Array.from({ length: 5 }).map((_, arrIndex) => {
+                      const playerRace = player.races[arrIndex]
+                      return (
+                        <div
+                          key={arrIndex}
+                          className={clsx("text-center size-6 border", playerRace?.laneColor && laneColorMap[playerRace?.laneColor])}
+                        >
+                          {playerRace?.placement}
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <div className="text-center w-6 border ml-2">
+                    {player.races.reduce((acc, race) => {
+                      if (race.placement) {
+                        return acc + (4 - race.placement)
+                      }
+                      return acc
+                    }, 0)}
                   </div>
                 </div>
               </li>

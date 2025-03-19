@@ -28,7 +28,7 @@ const Race = ({ id, playerIds, players, getPlacement, handlePlacementChange, get
                 value={getLaneColor(currentPlayer.id, id)}
                 onChange={e => handleLaneColorChange(currentPlayer.id, id, e.target.value as LaneColor)}
               >
-                {!currentPlayer.races.some(race => race.raceId === id) && <option value={"color"}>color</option>}
+                {!currentPlayer.races.some(race => race.raceId === id && race.laneColor) && <option value={"color"}>color</option>}
                 <option value={"red"}>Red</option>
                 <option value={"yellow"}>Yellow</option>
                 <option value={"green"}>Green</option>
@@ -39,7 +39,7 @@ const Race = ({ id, playerIds, players, getPlacement, handlePlacementChange, get
                 value={getPlacement(currentPlayer.id, id)}
                 onChange={e => handlePlacementChange(currentPlayer.id, id, parseInt(e.target.value) as Placement)}
               >
-                {!currentPlayer.races.some(race => race.raceId === id) && <option value={"place"}>place</option>}
+                {!currentPlayer.races.some(race => race.raceId === id && race.placement) && <option value={"place"}>place</option>}
                 <option value={placements[0].toString()}>1st</option>
                 <option value={placements[1].toString()}>2nd</option>
                 <option value={placements[2].toString()}>3rd</option>

@@ -3,6 +3,7 @@
 import Race from "@/components/Race"
 import { usePersistedState } from "@/hooks/usePersistedState"
 import createGroups from "@/utils/createGroups"
+import { laneColorMap } from "@/utils/laneColorMap"
 import clsx from "clsx"
 
 export interface PlayerRace {
@@ -16,13 +17,6 @@ export interface Player {
   carNumber: string
   name: string
   races: PlayerRace[]
-}
-
-export const laneColorMap = {
-  red: "bg-red-500",
-  blue: "bg-blue-400",
-  green: "bg-green-500",
-  yellow: "bg-yellow-300"
 }
 
 export const laneColors = ["red", "blue", "green", "yellow"] as const

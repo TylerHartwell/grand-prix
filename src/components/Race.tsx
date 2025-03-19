@@ -1,6 +1,7 @@
 "use client"
 
-import { laneColorMap, laneColors, Placement, placements, Player } from "@/app/page"
+import { laneColors, Placement, placements, Player } from "@/app/page"
+import { laneColorMap } from "@/utils/laneColorMap"
 import clsx from "clsx"
 
 interface Props {

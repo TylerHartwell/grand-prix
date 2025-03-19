@@ -1,6 +1,7 @@
 "use client"
 
-import { LaneColor, Placement, placements, Player } from "@/app/page"
+import { LaneColor, laneColorMap, Placement, placements, Player } from "@/app/page"
+import clsx from "clsx"
 
 interface Props {
   id: number
@@ -22,7 +23,16 @@ const Race = ({ id, playerIds, players, getPlacement, handlePlacementChange, get
           return (
             <li key={playerId} className="text-nowrap flex gap-2">
               <div className="w-[2ch] text-center">{currentPlayer.carNumber}</div>
-              <div>{currentPlayer.name}</div>
+              <div className="b3 flex">
+                {Array.from({ length: 5 }).map((_, arrIndex) => {
+                  const playerRace = currentPlayer.races[arrIndex]
+                  return (
+                    <div key={arrIndex} className={clsx("text-center size-6 border", playerRace?.laneColor && laneColorMap[playerRace?.laneColor])}>
+                      {playerRace?.placement}
+                    </div>
+                  )
+                })}
+              </div>
               <select
                 name="laneColor"
                 value={getLaneColor(currentPlayer.id, id)}
@@ -30,9 +40,9 @@ const Race = ({ id, playerIds, players, getPlacement, handlePlacementChange, get
               >
                 {!currentPlayer.races.some(race => race.raceId === id && race.laneColor) && <option value={"color"}>color</option>}
                 <option value={"red"}>Red</option>
-                <option value={"yellow"}>Yellow</option>
-                <option value={"green"}>Green</option>
                 <option value={"blue"}>Blue</option>
+                <option value={"green"}>Green</option>
+                <option value={"yellow"}>Yellow</option>
               </select>
               <select
                 name="placement"

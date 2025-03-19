@@ -24,18 +24,30 @@ export interface Player {
   races: PlayerRace[]
 }
 
-const laneColorMap = {
+export const laneColorMap = {
   red: "bg-red-500",
-  blue: "bg-blue-500",
+  blue: "bg-blue-400",
   green: "bg-green-500",
-  yellow: "bg-yellow-500"
+  yellow: "bg-yellow-300"
 }
 
-export const laneColors = ["red", "yellow", "green", "blue"] as const
+export const laneColors = ["red", "blue", "green", "yellow"] as const
 export const placements = [1, 2, 3, 4] as const
 
 export type LaneColor = (typeof laneColors)[number]
 export type Placement = (typeof placements)[number]
+
+// function findOccurrences(arr: number[][], target: number) {
+//   const indices: number[] = [];
+
+//   arr.forEach((subArray, index) => {
+//     if (subArray.includes(target)) {
+//       indices.push(index);
+//     }
+//   });
+
+//   return indices;
+// }
 
 const initialPlayers: Player[] = Array.from({ length: 16 }, (_, index) => ({
   id: index,

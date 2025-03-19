@@ -26,7 +26,11 @@ const createGroups = () => {
     }
   }
 
-  return groups
+  const order = [0, 1, 2, 3, 4, 11, 13, 18, 5, 10, 12, 19, 6, 9, 15, 16, 7, 8, 14, 17]
+
+  const orderedGroups = order.map(index => groups[index])
+
+  return orderedGroups
 }
 
 export default createGroups

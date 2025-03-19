@@ -11,6 +11,7 @@ interface Props {
   players: Player[]
   getPlacement: (playerId: number, raceId: number) => Placement | undefined
   handlePlacementChange: (playerId: number, raceId: number, newPlacement: Placement) => void
+  isPlacementEditDisabled: boolean
 }
 
 const laneColorMap = {
@@ -20,7 +21,7 @@ const laneColorMap = {
   yellow: "bg-yellow-300"
 }
 
-const Race = ({ id, playerIds, players, getPlacement, handlePlacementChange }: Props) => {
+const Race = ({ id, playerIds, players, getPlacement, handlePlacementChange, isPlacementEditDisabled }: Props) => {
   return (
     <li key={id} className="flex relative border h-min">
       <span className="absolute top-[-20px] left-1/2 transform -translate-x-1/2 text-nowrap">Race {id + 1}.</span>
@@ -45,6 +46,7 @@ const Race = ({ id, playerIds, players, getPlacement, handlePlacementChange }: P
                 </div>
                 <select
                   name="placement"
+                  disabled={isPlacementEditDisabled}
                   value={getPlacement(currentPlayer.id, id)}
                   onChange={e => handlePlacementChange(currentPlayer.id, id, parseInt(e.target.value) as Placement)}
                 >

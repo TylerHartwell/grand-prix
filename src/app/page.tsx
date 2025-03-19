@@ -63,9 +63,13 @@ const initialPlayers: Player[] = Array.from({ length: 16 }, (_, index) => ({
 const Home = () => {
   const [players, setPlayers] = usePersistedState<Player[]>("players", initialPlayers)
   const [isPlayerEditDisabled, setIsPlayerEditDisabled] = usePersistedState("is-player-edit-disabled", false)
+  const [isPlacementEditDisabled, setIsPlacementEditDisabled] = usePersistedState("is-placement-edit-disabled", false)
 
-  const handleCheckboxChange = (event: { target: { checked: boolean | ((prevState: boolean) => boolean) } }) => {
-    setIsPlayerEditDisabled(event.target.checked) // Set the state based on checkbox value
+  const handlePlayerCheckboxChange = (event: { target: { checked: boolean | ((prevState: boolean) => boolean) } }) => {
+    setIsPlayerEditDisabled(event.target.checked)
+  }
+  const handlePlacementCheckboxChange = (event: { target: { checked: boolean | ((prevState: boolean) => boolean) } }) => {
+    setIsPlacementEditDisabled(event.target.checked)
   }
 
   const getPlacement = (playerId: number, raceId: number): Placement | undefined => {
@@ -120,7 +124,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center w-min">
-      <div className="flex gap-6 items-center b1">
+      <div className="flex gap-6 items-center ml-4">
         <div className="w-min flex flex-col items-center mt-4">
           <ol className="flex flex-col gap-0.5 items-center justify-center">
             {players.map(player => (
@@ -168,8 +172,12 @@ const Home = () => {
             ))}
           </ol>
           <label className="mt-10">
-            <input type="checkbox" checked={isPlayerEditDisabled} onChange={handleCheckboxChange} />
-            Disable inputs
+            <input type="checkbox" checked={isPlayerEditDisabled} onChange={handlePlayerCheckboxChange} />
+            Disable player input
+          </label>
+          <label className="mt-2">
+            <input type="checkbox" checked={isPlacementEditDisabled} onChange={handlePlacementCheckboxChange} />
+            Disable placement input
           </label>
         </div>
 
@@ -182,6 +190,7 @@ const Home = () => {
               players={players}
               getPlacement={getPlacement}
               handlePlacementChange={handlePlacementChange}
+              isPlacementEditDisabled={isPlacementEditDisabled}
             />
           ))}
         </ol>

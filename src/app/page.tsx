@@ -3,7 +3,6 @@
 import Race from "@/components/Race"
 import { usePersistedState } from "@/hooks/usePersistedState"
 import createGroups from "@/utils/createGroups"
-import { laneColorMap } from "@/utils/laneColorMap"
 import clsx from "clsx"
 
 export interface PlayerRace {
@@ -38,6 +37,13 @@ function getOccurrences(arr: number[][], target: number) {
 }
 
 const groups = createGroups()
+
+const laneColorMap = {
+  red: "bg-red-500",
+  blue: "bg-blue-400",
+  green: "bg-green-500",
+  yellow: "bg-yellow-300"
+}
 
 const raceLanes = [
   [0, 0, 1, 2, 3],

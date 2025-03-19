@@ -1,7 +1,6 @@
 "use client"
 
 import { laneColors, Placement, placements, Player } from "@/app/page"
-import { laneColorMap } from "@/utils/laneColorMap"
 import clsx from "clsx"
 
 interface Props {
@@ -10,6 +9,13 @@ interface Props {
   players: Player[]
   getPlacement: (playerId: number, raceId: number) => Placement | undefined
   handlePlacementChange: (playerId: number, raceId: number, newPlacement: Placement) => void
+}
+
+const laneColorMap = {
+  red: "bg-red-500",
+  blue: "bg-blue-400",
+  green: "bg-green-500",
+  yellow: "bg-yellow-300"
 }
 
 const Race = ({ id, playerIds, players, getPlacement, handlePlacementChange }: Props) => {

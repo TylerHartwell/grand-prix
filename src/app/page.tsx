@@ -4,25 +4,9 @@ import Race from "@/components/Race"
 import { usePersistedState } from "@/hooks/usePersistedState"
 import createGroups from "@/utils/createGroups"
 import clsx from "clsx"
-
-export interface PlayerRace {
-  raceId: number
-  laneColor: LaneColor
-  placement?: Placement
-}
-
-export interface Player {
-  id: number
-  carNumber: string
-  name: string
-  races: PlayerRace[]
-}
-
-export const laneColors = ["red", "blue", "green", "yellow"] as const
-export const placements = [1, 2, 3, 4] as const
-
-export type LaneColor = (typeof laneColors)[number]
-export type Placement = (typeof placements)[number]
+import { Player } from "./types/player"
+import { laneColors } from "./types/laneColors"
+import { Placement } from "./types/placements"
 
 function getOccurrences(arr: number[][], target: number) {
   const indices: number[] = []
